@@ -2,37 +2,30 @@ package com.jakubbadysiak.followmeapp;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.io.IOException;
-import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -80,7 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        //mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             buildGoogleApiClient();
@@ -96,10 +89,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
-        lastLocation = location;
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        altitude = location.getAltitude();
+//        lastLocation = location;
+//        latitude = location.getLatitude();
+//        longitude = location.getLongitude();
+//        altitude = location.getAltitude();
 
         if (currentLocationMarker != null){
             currentLocationMarker.remove();
@@ -107,20 +100,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
 
-        MarkerOptions markerOptions = new MarkerOptions();
+//        MarkerOptions markerOptions = new MarkerOptions();
+//
+//        markerOptions.position(latLng);
+//        markerOptions.title("Current Location!");
+//        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+//
+//        currentLocationMarker = mMap.addMarker(markerOptions);
 
-        markerOptions.position(latLng);
-        markerOptions.title("Current Location!");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
-        currentLocationMarker = mMap.addMarker(markerOptions);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomBy(12));
-
-        if (client != null){
-            LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
-        }
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14.0f));
     }
 
     @Override
